@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"><!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Secure Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .welcome {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .info-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            display: inline-block;
+            width: 120px;
+        }
+        .info-value {
+            color: #333;
+        }
+        .password-score {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👋 Welcome, {{ user.username }}!</h1>
+        <p class="welcome">You're securely logged in</p>
+        
+        <div class="user-info">
+            <h3>Your Account Info</h3>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ user.email }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Member since:</span>
+                <span class="info-value">{{ user.created_at.strftime('%B %d, %Y') }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Last login:</span>
+                <span class="info-value">{{ user.last_login.strftime('%B %d, %Y at %I:%M %p') if user.last_login else 'First login' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Password strength:</span>
+                <span class="info-value">
+                    {% if user.password_score >= 80 %}
+                        <span class="password-score" style="background: #00C85120; color: #00C851">Strong ({{ user.password_score }}%)</span>
+                    {% elif user.password_score >= 60 %}
+                        <span class="password-score" style="background: #33b5e520; color: #33b5e5">Good ({{ user.password_score }}%)</span>
+                    {% elif user.password_score >= 40 %}
+                        <span class="password-score" style="background: #ffbb3320; color: #ffbb33">Medium ({{ user.password_score }}%)</span>
+                    {% else %}
+                        <span class="password-score" style="background: #ff444420; color: #ff4444">Weak ({{ user.password_score }}%)</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <a href="/logout" class="btn">Logout</a>
+    </div>
+</body>
+</html>
